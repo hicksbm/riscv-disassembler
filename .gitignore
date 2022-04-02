@@ -1,1 +1,4 @@
 build/
+input/
+output/
+scripts/__pycache__/
