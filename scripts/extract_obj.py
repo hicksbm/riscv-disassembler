@@ -1,4 +1,5 @@
 # import necessary libraries
+import sys
 import pandas as pd
 import numpy as np
 import os
@@ -6,6 +7,11 @@ import glob
 
 # import user-defined library
 import helper
+
+# user input params
+ordered_with_no_sharing=False
+if len(sys.argv) > 1 and sys.argv[1] == '-order':
+    ordered_with_no_sharing=True
 
 # use glob to get all the csv files 
 # in the folder
@@ -34,17 +40,27 @@ for f in csv_files:
     instruction_addresses = np.array([int(binary,2) for binary in instruction_addresses], dtype=np.uint64)[np.newaxis]
     instruction_addresses = instruction_addresses.T
 
-    # map every address to the corresponding instruction
-    # repeat addresses will get overwritten with last executed data
-    # include addresses not 0 (mod 4) <-- TODO: Verify this is OK
-    inst_addr_concat = np.concatenate((instruction_binaries, instruction_addresses), axis=1)
-    instructions = {}
-    for (instruction, address) in inst_addr_concat:
-        #if (address % 4 == 0):
-        instructions[address] = instruction
-    
     filename = '../output/' + f[9:-4] + '.bin'
-    with open(filename, 'wb') as f:
-        for (address, instruction) in sorted(instructions.items()):
-            f.write(np.uint64(address))
-            f.write(np.uint32(instruction))
+    
+    if ordered_with_no_sharing:
+
+        # map every address to the corresponding instruction
+        # repeat addresses will get overwritten with last executed data
+        # include addresses not 0 (mod 4) <-- TODO: Verify this is OK
+        inst_addr_concat = np.concatenate((instruction_binaries, instruction_addresses), axis=1)
+        instructions = {}
+        for (instruction, address) in inst_addr_concat:
+            #if (address % 4 == 0):
+            instructions[address] = instruction
+        
+        
+        with open(filename, 'wb') as file:
+            for (address, instruction) in sorted(instructions.items()):
+                file.write(np.uint64(address))
+                file.write(np.uint32(instruction))
+    
+    else:
+        with open(filename, 'wb') as file:
+            for i in range(len(instruction_addresses)):
+                file.write(np.uint64(instruction_addresses[i]))
+                file.write(np.uint32(instruction_binaries[i]))
