@@ -62,5 +62,6 @@ for f in csv_files:
     else:
         with open(filename, 'wb') as file:
             for i in range(len(instruction_addresses)):
-                file.write(np.uint64(instruction_addresses[i]))
-                file.write(np.uint32(instruction_binaries[i]))
+                if (instruction_binaries[i] != 0): # don't write the initializing add x0, x0, 0
+                    file.write(np.uint64(instruction_addresses[i]))
+                    file.write(np.uint32(instruction_binaries[i]))

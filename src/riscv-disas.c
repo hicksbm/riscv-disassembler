@@ -295,7 +295,7 @@ static const rv_comp_data rvcp_fsgnjx_q[] = {
 /* instruction metadata */
 
 const rv_opcode_data opcode_data[] = {
-    { "nop", rv_codec_illegal, rv_fmt_none, NULL, 0, 0, 0 },
+    { "add           x0,x0,0", rv_codec_illegal, rv_fmt_none, NULL, 0, 0, 0 },
     { "lui", rv_codec_u, rv_fmt_rd_imm, NULL, 0, 0, 0 },
     { "auipc", rv_codec_u, rv_fmt_rd_offset, NULL, 0, 0, 0 },
     { "jal", rv_codec_uj, rv_fmt_rd_offset, rvcp_jal, 0, 0, 0 },
