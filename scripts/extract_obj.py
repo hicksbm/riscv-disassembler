@@ -34,8 +34,8 @@ for f in csv_files:
     instruction_binaries = np.array([int(binary,2) for binary in instruction_binaries], dtype=np.uint32)[np.newaxis]
     instruction_binaries = instruction_binaries.T
 
-    # identify program counts from 'id_stage_i.issue_entry_o.pc'
-    instruction_addresses = df['id_stage_i.issue_entry_o.pc'].to_numpy().flatten()
+    # identify program counts from 'id_stage_i.decoded_instruction.pc'
+    instruction_addresses = df['id_stage_i.decoded_instruction.pc'].to_numpy().flatten()
     instruction_addresses = [helper.to_binary_string(binary) for binary in instruction_addresses]
     instruction_addresses = np.array([int(binary,2) for binary in instruction_addresses], dtype=np.uint64)[np.newaxis]
     instruction_addresses = instruction_addresses.T

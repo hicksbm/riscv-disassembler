@@ -83,22 +83,20 @@ void run(const char* filename)
 
 	// write initializing instruction
 	fprintf(writeFilePtr, "add           x0,x1,x2\n");
+
+	// close writeFilePtr
+	fclose(writeFilePtr);
 	
 	struct inst_t instruction;
 	while (fread(&instruction, 12, 1, readFilePtr)) {//read until end of file
 		print_inst(writeFilename, instruction.addr, instruction.inst);		
     }
 
-/*
-	long long pc = 0b0000000000000000000000000000000000000000000000000000100000000000;
-	long inst = 0b01111011001000110000000011110011;
+	// reopen writeFilePtr to append "end:"
 
-	char buf[80] = { 0 };
-    disasm_inst(buf, sizeof(buf), rv64, pc, inst );
+	writeFilePtr = fopen(writeFilename, "a");
 
-	
-	printf("%016" PRIx64 ":  %s\n", pc, buf);
-*/
+	fprintf(writeFilePtr, "end:\n");
 }
 
 int main(int argc, char **argv)
