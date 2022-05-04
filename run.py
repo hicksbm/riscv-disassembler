@@ -11,7 +11,7 @@ from scripts import helper
 # use glob to get all the csv files 
 # in the folder
 path = os.getcwd()
-csv_files = glob.glob(os.path.join("input/*.csv"))
+csv_files = glob.glob(os.path.join("input/**/*.csv"), recursive=True)
 
 # create output folder
 if not os.path.isdir('output'):
@@ -30,20 +30,32 @@ for f in csv_files:
     df_array = df.to_numpy().T
     df = pd.DataFrame(df_array[1::], columns=[df_array[0]])
 
+    f = f.replace('input\\','', 1)
+
     # identify binaries from 'i_frontend.fetch_entry_o.instruction'
+    if 'id_stage_i.instruction' not in df:
+        print('id_stage_i.instruction not in ' + f)
+        continue
     instruction_binaries = df['id_stage_i.instruction'].to_numpy().flatten()
     instruction_binaries = [helper.to_binary_string(binary) for binary in instruction_binaries]
     instruction_binaries = np.array([int(binary,2) for binary in instruction_binaries], dtype=np.uint32)[np.newaxis]
     instruction_binaries = instruction_binaries.T
 
     # identify program counts from 'id_stage_i.decoded_instruction.pc'
+    if 'id_stage_i.decoded_instruction.pc' not in df:
+        print('id_stage_i.decoded_instruction.pc not in ' + f)
+        continue
     instruction_addresses = df['id_stage_i.decoded_instruction.pc'].to_numpy().flatten()
     instruction_addresses = [helper.to_binary_string(binary) for binary in instruction_addresses]
     instruction_addresses = np.array([int(binary,2) for binary in instruction_addresses], dtype=np.uint64)[np.newaxis]
     instruction_addresses = instruction_addresses.T
 
-    full_instruction_filename = 'output/' + f[9:-4] + '_full.bin'
-    comp_instruction_filename = 'output/' + f[9:-4] + '_comp.bin'
+    # create directory in output folder
+    directory = 'output/'+f[:-4]
+    os.makedirs(directory, exist_ok=True)
+
+    full_instruction_filename = directory + '/full.bin'
+    comp_instruction_filename = directory + '/comp.bin'
 
     with open(full_instruction_filename, 'wb') as file:
         for i in range(len(instruction_addresses)):
@@ -70,7 +82,7 @@ process.communicate()
 # use glob to get all the bin files 
 # in the folder
 path = os.getcwd()
-bin_files = glob.glob(os.path.join("output/*.bin"))
+bin_files = glob.glob(os.path.join("output/**/*.bin"), recursive=True)
 
 for f in bin_files:
     subprocess.Popen(['build/disas.exe', f])
