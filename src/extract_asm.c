@@ -82,9 +82,6 @@ void run(const char* filename)
 	// write _start: to beginning of file
 	fprintf(writeFilePtr, ".section .text\n.globl _start\n\n_start:\n");
 
-	// write initializing instruction
-	fprintf(writeFilePtr, "add           x0,x1,x2\n");
-
 	// close writeFilePtr
 	fclose(writeFilePtr);
 	
