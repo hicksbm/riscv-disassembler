@@ -14,9 +14,11 @@ path = os.getcwd()
 csv_files = glob.glob(os.path.join("input/*.csv"))
 
 # create output folder
-os.mkdir('output')
+if not os.path.isdir('output'):
+    os.mkdir('output')
 # create build folder
-os.mkdir('build')
+if not os.path.isdir('build'):
+    os.mkdir('build')
 
 # loop over the list of csv files, create compressed and full binaries for all of them
 for f in csv_files:
