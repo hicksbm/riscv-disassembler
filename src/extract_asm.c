@@ -38,7 +38,7 @@ void print_inst(const char* filename, uint64_t pc, uint32_t inst)
 {
     char buf[80] = { 0 };
     disasm_inst(buf, sizeof(buf), rv64, pc, inst);
-    printf("%016" PRIx64 ":  %s\n", pc, buf);
+    //printf("%016" PRIx64 ":  %s\n", pc, buf);
 
 	// append the instruction to input file
 	FILE *writeFilePtr = fopen(filename, "a");
