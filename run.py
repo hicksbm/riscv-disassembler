@@ -67,8 +67,11 @@ for f in csv_files:
         file.write(np.uint64(0))
         file.write(np.uint32(0))
 
+        valid_found = False
         for i in range(len(instruction_addresses)):
-            if (instruction_binaries[i] != 0): # don't write the initializing add x0, x0, 0
+            # don't write the initializing add x0, x0, 0 until first occurence of different instruction
+            if (valid_found or instruction_binaries[i] != 0):
+                valid_found = True
                 file.write(np.uint64(instruction_addresses[i]))
                 file.write(np.uint32(instruction_binaries[i]))
 
