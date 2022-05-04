@@ -49,6 +49,7 @@ void print_inst(const char* filename, uint64_t pc, uint32_t inst)
 
 	remove_first_word(buf); // get's rid of instruction word
 	fprintf(writeFilePtr, "%s\n", buf);
+	fclose(writeFilePtr);
 }
 
 struct inst_t
@@ -91,6 +92,7 @@ void run(const char* filename)
 	while (fread(&instruction, 12, 1, readFilePtr)) {//read until end of file
 		print_inst(writeFilename, instruction.addr, instruction.inst);		
     }
+	fclose(readFilePtr);
 
 	// reopen writeFilePtr to append "end:"
 
