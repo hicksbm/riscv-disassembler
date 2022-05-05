@@ -2,9 +2,8 @@
 
 RISC-V Disassembler with support for RV32/RV64/RV128 IMAFDC
 
-1. create a folder called ```input``` in the root directory
-2. add the desired input files to the ```input``` folder
-3. execute ```run.py``` in the root directory
+1. add the desired input files to the ```input``` folder
+2. execute ```run.py``` in the root directory
 
 # Limitations
 
