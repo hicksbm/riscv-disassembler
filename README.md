@@ -8,5 +8,5 @@ RISC-V Disassembler with support for RV32/RV64/RV128 IMAFDC
 # Limitations
 
 1. Branch and jump instruction targets not a part of the execution flow
-    - executing the output assembly is not guarunteed to produce same instructions or same order of execution
+    - executing the output assembly is not guaranteed to produce same instructions or same order of execution
     - output assembly may not compile
