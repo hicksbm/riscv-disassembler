@@ -1,4 +1,4 @@
 build/
-input/
+input/*
 output/
 scripts/__pycache__/
