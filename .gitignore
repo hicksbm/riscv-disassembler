@@ -1,4 +1,6 @@
 build/
-input/*
+input/**/*
+!input/
+!input/.gitkeep
 output/
 scripts/__pycache__/
