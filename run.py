@@ -50,6 +50,11 @@ for f in csv_files:
     instruction_addresses = np.array([int(binary,2) for binary in instruction_addresses], dtype=np.uint64)[np.newaxis]
     instruction_addresses = instruction_addresses.T
 
+    # map every instruction binary to its particular address
+    pc_inst_map = {}
+    for i in range(len(instruction_addresses)):
+        pc_inst_map[int(instruction_addresses[i])] = instruction_binaries[i]
+
     # create directory in output folder
     directory = 'output/'+f[:-4]
     os.makedirs(directory, exist_ok=True)
@@ -58,9 +63,9 @@ for f in csv_files:
     comp_instruction_filename = directory + '/comp.bin'
 
     with open(full_instruction_filename, 'wb') as file:
-        for i in range(len(instruction_addresses)):
-            file.write(np.uint64(instruction_addresses[i]))
-            file.write(np.uint32(instruction_binaries[i]))
+        for address,instruction in sorted(pc_inst_map.items()):
+            file.write(np.uint64(address))
+            file.write(np.uint32(instruction))
     
     with open(comp_instruction_filename, 'wb') as file:
         # write a single initializing add x0, x0, 0 instruction, with PC = 0
@@ -68,12 +73,12 @@ for f in csv_files:
         file.write(np.uint32(0))
 
         valid_found = False
-        for i in range(len(instruction_addresses)):
+        for address,instruction in sorted(pc_inst_map.items()):
             # don't write the initializing add x0, x0, 0 until first occurence of different instruction
-            if (valid_found or instruction_binaries[i] != 0):
+            if (valid_found or instruction != 0):
                 valid_found = True
-                file.write(np.uint64(instruction_addresses[i]))
-                file.write(np.uint32(instruction_binaries[i]))
+                file.write(np.uint64(address))
+                file.write(np.uint32(instruction))
 
 
 # re-compile the src code, use subprocess so we wait until compilation completes
